@@ -1,5 +1,10 @@
+extern crate test;
+
 #[cfg(test)]
-mod tests {
+mod insertion_sort_test {
+
+    use crate::data::benchmarks_datas;
+    use test::{Bencher, black_box};
     use super::*;
 
     #[test]
@@ -39,6 +44,16 @@ mod tests {
         assert_eq!(insertion_sort::insertion_sort(vec![-1]), vec![-1]);
         assert_eq!(insertion_sort::insertion_sort(vec![1,2,3,4,5,7,8,9]), vec![1,2,3,4,5,7,8,9]);
         assert_eq!(insertion_sort::insertion_sort(vec![1,2,3,4,5,7,9,8]), vec![1,2,3,4,5,7,8,9]);
+    }
+
+    #[bench]
+    fn insertion_sort(b: &mut Bencher) {
+
+        b.iter(|| {
+            for v in 0..32 {
+                black_box(insertion_sort::insertion_sort(benchmarks_datas::VECTORS.lock().unwrap()[v].clone()));
+            }
+        });
     }
 }
 
